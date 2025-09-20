@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Specialized;
+using System.Diagnostics.Tracing;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Net;
 using System.Text.RegularExpressions;
 
 namespace program;
@@ -33,13 +36,51 @@ static class Program
         { "бирюз", Color.Turquoise },
     };
 
+    static List<char> consonantLetters = new() { 'б', 'ь', 'ъ', 'г', 'д', 'ж', 'з', 'ы', 'э' };
+
     static string GetText(string filePath) => File.ReadAllText(filePath);
 
     static List<Color> GetColorMap(string text)
     {
         var words = Regex.Matches(text, @"\b[\p{IsCyrillic}a-zA-Z]+\b").Select(w => w.ToString()).ToList();
         
-        var wordList = words.Where(w => ColorMap.Keys.Any(pref => w.StartsWith(pref, StringComparison.OrdinalIgnoreCase))).ToList();
+        var wordList = words.Where(w => ColorMap.Keys.Any(pref => w.StartsWith(pref, StringComparison.OrdinalIgnoreCase)))
+            .Where(w => !consonantLetters.Any(c => w.EndsWith(c)))
+            .ToList();
+
+        // согласные последней буквы
+        //
+        Dictionary<string, int> cnt = new Dictionary<string, int>();
+        foreach (var word in wordList)
+        {
+            if (!cnt.ContainsKey(word))
+            {
+                cnt.Add(word, 0);
+            }
+            cnt[word]++;
+        }
+
+        foreach (var (key, v) in cnt)
+        {
+            float kol = (float)v / wordList.Count;
+
+            Console.WriteLine(key);
+            if (kol >= 0.1f)
+            {
+                wordList.RemoveAll(w => w == key);
+            }
+        }
+
+        //foreach (var word in wordList)
+        //{
+        //    if (consonantLetters.Any(c => word.EndsWith(c)))
+        //    {
+        //        Console.WriteLine(word);
+        //    }
+        //}
+
+        Console.WriteLine("_------------");
+
         var colorList = wordList.Select(w =>
         {
             var key = ColorMap.Keys.FirstOrDefault(k => w.StartsWith(k, StringComparison.OrdinalIgnoreCase));
@@ -49,7 +90,7 @@ static class Program
         return colorList;
     }
 
-    static void DrawPicture(List<Color> colorList)
+    static void DrawPicture(List<Color> colorList, string name)
     {
         int numOfRectangles = colorList.Count;
         int rowSize = (int)Math.Sqrt(numOfRectangles);
@@ -61,7 +102,7 @@ static class Program
         {
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                g.Clear(Color.Magenta);
+                g.Clear(Color.Black);
 
                 for (int i = 0; i < rowSize; i++)
                 {
@@ -74,16 +115,19 @@ static class Program
                     }
                 }
             }
-            bmp.Save("square.png", ImageFormat.Png);
+            bmp.Save(name, ImageFormat.Png);
         }
     }
 
     static void Main()
     {
-        var text = GetText("D:\\Учёба\\КПО 2 курс\\Labratory_1\\Podarok.txt");
+        var text = GetText("D:\\CPO\\Labratory_1\\Aeroport.txt");
+        var text2 = GetText("D:\\CPO\\Labratory_1\\Podarok.txt");
 
         var colorList = GetColorMap(text);
+        var colorList2 = GetColorMap(text2);
 
-        DrawPicture(colorList);
+        DrawPicture(colorList, "aeroport.png");
+        DrawPicture(colorList2, "podarok.png");
     }
 }
