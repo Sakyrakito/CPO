@@ -18,7 +18,7 @@ public class CommandExecute
             string? line;
             while ((line = reader.ReadLine()) != null)
             {
-                _data.Add(new GenericData(line.Split("    ")));
+                _data.Add(new GenericData(line.Split('\t')));
             }
         }
     }
@@ -32,7 +32,7 @@ public class CommandExecute
     public int CommandDiffImplementation(string protein1, string protein2)
     {
         int difference = 0;
-        if (_data.All(gd => gd.Protein != protein1)) difference--;
+        if (_data.All(gd => gd.Protein != protein1)) difference--; 
         if (_data.All(gd => gd.Protein != protein2)) difference -= 2;
 
         if (difference != 0)
@@ -50,5 +50,25 @@ public class CommandExecute
         }
 
         return difference;
+    }
+
+    public (char, int) CommandModeImplementation(string protein)
+    {
+        if (_data.All(gd => gd.Protein != protein))
+            return ('Z', -1);
+
+        string aminoAcid = _data.First(gd => gd.Protein == protein).Amino_acids;
+        Dictionary<char, int> countChar = aminoAcid.GroupBy(c => c).ToDictionary(g => g.Key, g => g.Count());
+
+        char maxChar = aminoAcid[0];
+        foreach (var (key, value) in countChar)
+        {
+            if (value > countChar[maxChar])
+                maxChar = key;
+            else if (value == countChar[maxChar] && key < maxChar)
+                maxChar = key;
+        }
+
+        return (maxChar, countChar[maxChar]);
     }
 }

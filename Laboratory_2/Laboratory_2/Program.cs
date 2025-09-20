@@ -4,13 +4,7 @@ static class Program
 {
     static void Main()
     {
-        
-        throw new NotImplementedException();
-
+        CommandManager commandManager = new CommandManager();
+        commandManager.ReadCommands();
     }
 }
-
-// TODO
-// 1) получить аминокислоты в List<GenericData>
-// 4) 3 функции под каждую команду
-// 5) запись ответа в файл
