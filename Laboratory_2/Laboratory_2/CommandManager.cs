@@ -102,7 +102,7 @@ public class CommandManager
         if (occurs == -1)
             WriteAnswerInFile($"MISSING: {protein}");
         else
-            WriteAnswerInFile($"{aminoAcid}    {occurs}");
+            WriteAnswerInFile($"{aminoAcid}\t{occurs}");
     }
 
     private static void WriteAnswerInFile(string message)

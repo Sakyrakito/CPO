@@ -58,15 +58,20 @@ public class CommandExecute
             return ('Z', -1);
 
         string aminoAcid = _data.First(gd => gd.Protein == protein).Amino_acids;
-        Dictionary<char, int> countChar = aminoAcid.GroupBy(c => c).ToDictionary(g => g.Key, g => g.Count());
+        Dictionary<char, int> countChar = new Dictionary<char, int>();
 
         char maxChar = aminoAcid[0];
-        foreach (var (key, value) in countChar)
+        for (int i = 0; i < aminoAcid.Length; i++)
         {
-            if (value > countChar[maxChar])
-                maxChar = key;
-            else if (value == countChar[maxChar] && key < maxChar)
-                maxChar = key;
+            if (!countChar.ContainsKey(aminoAcid[i]))
+                countChar.Add(aminoAcid[i], 1);
+            else
+                countChar[aminoAcid[i]]++;
+
+            if (countChar[aminoAcid[i]] > countChar[maxChar])
+                maxChar = aminoAcid[i];
+            else if (countChar[aminoAcid[i]] == countChar[maxChar] && aminoAcid[i] < maxChar)
+                maxChar = aminoAcid[i];
         }
 
         return (maxChar, countChar[maxChar]);

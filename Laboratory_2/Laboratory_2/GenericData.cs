@@ -14,5 +14,5 @@ public struct GenericData
     }
 
     public override string ToString() =>
-        $"{Protein}    {Organizm}    {Amino_acids}";
+        $"{Protein}\t{Organizm}\t{Amino_acids}";
 }
