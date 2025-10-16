@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Laboratory_3
 {
+    [Serializable]
     public class Word : Token
     {
+        public Word() { }
+
         public Word(string value) : base(value) {}
     }
 }

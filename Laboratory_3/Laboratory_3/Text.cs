@@ -8,15 +8,17 @@ namespace Laboratory_3
     public class Text
     {
         [XmlElement("Sentence")]
-        public List<Sentence> Sentences { get; } = new List<Sentence>();
+        public List<Sentence> Sentences { get; set; } = new List<Sentence>();
 
         public Text(string text)
         {
             var parts = Regex.Split(text, @"(?<=[.!?])\s+");
-            foreach (var p  in parts)
+            foreach (var p in parts)
                 if (!string.IsNullOrEmpty(p))
                     Sentences.Add(new Sentence(p.Trim()));
         }
+
+        public Text() { }
 
         public void PrintSentencesByWordsCount()
         {
@@ -28,7 +30,8 @@ namespace Laboratory_3
 
         public void PrintSentencesByLength()
         {
-            foreach (var s in Sentences.OrderBy(s => s.Tokens.Count).ToList())
+            foreach (var s in Sentences.OrderBy(s => s.Tokens.Sum(t => t.Value.Length) + 
+            s.WordsCount() - 1).ToList())
             {
                 Console.WriteLine(s.ToString());
             }
@@ -42,7 +45,7 @@ namespace Laboratory_3
 
             foreach (var s in sentences)
             {
-                var words = s.Tokens.Where(t => t.Value is Word && t.Value.Length == length).ToList();
+                var words = s.Tokens.Where(t => t is Word && t.Value.Length == length).ToList();
 
                 foreach (var w in words)
                 {
@@ -56,12 +59,15 @@ namespace Laboratory_3
 
         public void RemoveWordsStartsOfConsonant(int length)
         {
-            string vowels = "АаЕеЁёИиОоУуЫыЭэЮюЯяAaEeIiOoUuYy";
+            string vowels = "АаЕеЁёИиОоУуЫыЭэЮюЯяAaEeIiOoUuYy0123456789";
 
             for (int i = 0; i < Sentences.Count; i++)
             {
-                var newWords = Sentences[i].Tokens.Where(t => t.Value.Length != length 
-                || vowels.Contains(t.Value[0])).ToList();
+                var newWords = Sentences[i].Tokens.Where(t =>
+                t is Punctuation ||
+                t is Word &&
+                (t.Value.Length != length ||
+                vowels.Contains(t.Value[0]))).ToList();
 
                 Sentences[i].Tokens.RemoveAll(t => !newWords.Contains(t));
             }
@@ -75,7 +81,27 @@ namespace Laboratory_3
             var words = Sentences[sentenceIndex].Tokens.Select(t => (t is Word && t.Value.Length == length)
             ? new Word(substring) : t).ToList();
 
-            //Sentences[sentenceIndex].Tokens = words;
+            Sentences[sentenceIndex].ChangeWords(words);
+        }
+
+        public void RemoveStopWords()
+        {
+            var englishStopWord = File.ReadAllLines("stopwords_en.txt")
+                .Select(w => w.Trim().ToLower())
+                .ToHashSet();
+
+            var russianStopWord = File.ReadAllLines("stopwords_ru.txt")
+                .Select(w => w.Trim().ToLower())
+                .ToHashSet();
+
+            for (int i = 0; i < Sentences.Count; i++)
+            {
+                var newWords = Sentences[i].Tokens.Where(w => 
+                !englishStopWord.Contains(w.Value.ToLower()) && 
+                !russianStopWord.Contains(w.Value.ToLower())).ToList();
+
+                Sentences[i].ChangeWords(newWords);
+            }
         }
 
         public void ExportToXml(string filePath)

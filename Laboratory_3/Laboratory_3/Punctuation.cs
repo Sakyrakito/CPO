@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Laboratory_3
 {
+    [Serializable]
     public class Punctuation : Token
     {
+        public Punctuation() { }
+
         public Punctuation(string value) : base(value) { }
     }
 }
