@@ -4,7 +4,7 @@ namespace Laboratory_3
 {
     static class Program
     {
-        static readonly Text text = new Text("Hello, world! It's my pleasure. Let's go to the club... a, a's, able? На мне карат 5 лет");
+        static readonly Text text = new Text("Hello, world! It's my pleasure. Let's go to the club... a, a's, able? На мне карат 5 лет. Hello, world!");
         static void Main(string[] args)
         {
 
@@ -18,6 +18,7 @@ namespace Laboratory_3
                 Console.WriteLine("5. In a specific sentence of the text, replace words of a given length with the specified substring");
                 Console.WriteLine("6. Remove stopwords from the text");
                 Console.WriteLine("7. Export the text to an XML document");
+                Console.WriteLine("8. Build a concordance for the given text");
                 Console.WriteLine("0. Exit the program");
 
                 Console.Write("\nYour choice: ");
@@ -51,6 +52,10 @@ namespace Laboratory_3
 
                     case "7":
                         text.ExportToXml("xmlText.xml");
+                        break;
+
+                    case "8":
+                        text.BuildConcordance();
                         break;
 
                     case "0":

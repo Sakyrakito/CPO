@@ -59,7 +59,7 @@ namespace Laboratory_3
 
         public void RemoveWordsStartsOfConsonant(int length)
         {
-            string vowels = "АаЕеЁёИиОоУуЫыЭэЮюЯяAaEeIiOoUuYy0123456789";
+            string consonant = "БбВвГгДдЖжЗзЙйКкЛлМмНнПпРрСсТтФфХхЦцЧчШшЩщBbCcDdFfGgHhJjKkLlMmNnPpQqRrSsTtVvWwXxYyZz";
 
             for (int i = 0; i < Sentences.Count; i++)
             {
@@ -67,7 +67,7 @@ namespace Laboratory_3
                 t is Punctuation ||
                 t is Word &&
                 (t.Value.Length != length ||
-                vowels.Contains(t.Value[0]))).ToList();
+                !consonant.Contains(t.Value[0]))).ToList();
 
                 Sentences[i].Tokens.RemoveAll(t => !newWords.Contains(t));
             }
@@ -110,6 +110,40 @@ namespace Laboratory_3
             using (var writer = new StreamWriter(filePath))
             {
                 serializer.Serialize(writer, this);
+            }
+        }
+
+        public void BuildConcordance()
+        {
+            SortedDictionary<string, (int, HashSet<int>)> concordance = new SortedDictionary<string, (int, HashSet<int>)>();
+
+            for (int i = 0; i < Sentences.Count; i++)
+            {
+                foreach (var token in Sentences[i].Tokens)
+                {
+                    if (token is not Word)
+                        continue;
+
+                    string word = token.Value.ToLower();
+
+                    if (!concordance.ContainsKey(word.ToString()))
+                        concordance.Add(word.ToString(), (1, new HashSet<int> { i + 1 }));
+                    else
+                    {
+                        var (count, line) = concordance[word.ToString()];
+                        line.Add(i + 1);
+                        concordance[word] = (count + 1, line);
+                    }
+                }
+            }
+
+            foreach (var (word, (count, line)) in concordance)
+            {
+                Console.Write(word + " | " + count + " | ");
+                foreach (var index in line)
+                    Console.Write(index.ToString() + "  ");
+
+                Console.WriteLine();
             }
         }
 
