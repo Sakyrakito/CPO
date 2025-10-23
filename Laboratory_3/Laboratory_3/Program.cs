@@ -1,13 +1,11 @@
-﻿using static System.Net.Mime.MediaTypeNames;
-
-namespace Laboratory_3
+﻿namespace Laboratory_3
 {
     static class Program
     {
-        static readonly Text text = new Text("Hello, world! It's my pleasure. Let's go to the club... a, a's, able? На мне карат 5 лет. Hello, world!");
+        static readonly Text text = Parser.ReadAllText("text.txt");
+        
         static void Main(string[] args)
         {
-
             while (true)
             {
                 Console.WriteLine("Choose an action:");
@@ -21,7 +19,8 @@ namespace Laboratory_3
                 Console.WriteLine("8. Build a concordance for the given text");
                 Console.WriteLine("0. Exit the program");
 
-                Console.Write("\nYour choice: ");
+                Console.WriteLine();
+                Console.Write("Your choice: ");
                 string? choice = Console.ReadLine();
 
                 switch (choice)

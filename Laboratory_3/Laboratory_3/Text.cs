@@ -20,9 +20,18 @@ namespace Laboratory_3
 
         public Text() { }
 
+        public void PrintSentences()
+        {
+            foreach (var sentence in Sentences)
+            {
+                Console.WriteLine(sentence.ToString());
+            }
+        }
+
         public void PrintSentencesByWordsCount()
         {
-            foreach (var s in Sentences.OrderBy(s => s.WordsCount()).ToList())
+            Sentences = Sentences.OrderBy(s => s.WordsCount()).ToList();
+            foreach (var s in Sentences)
             {
                 Console.WriteLine(s.ToString());
             }
@@ -30,8 +39,10 @@ namespace Laboratory_3
 
         public void PrintSentencesByLength()
         {
-            foreach (var s in Sentences.OrderBy(s => s.Tokens.Sum(t => t.Value.Length) + 
-            s.WordsCount() - 1).ToList())
+            Sentences = Sentences.OrderBy(s =>
+            s.Tokens.Sum(t => t.Value.Length) + s.WordsCount() - 1).ToList();
+            
+            foreach (var s in Sentences)
             {
                 Console.WriteLine(s.ToString());
             }
@@ -41,35 +52,17 @@ namespace Laboratory_3
         {
             var sentences = Sentences.Where(s => s.Tokens[s.Tokens.Count - 1].Value.EndsWith('?')).ToList();
 
-            HashSet<string> wordsFound = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
             foreach (var s in sentences)
             {
-                var words = s.Tokens.Where(t => t is Word && t.Value.Length == length).ToList();
-
-                foreach (var w in words)
-                {
-                    if (wordsFound.Add(w.Value))
-                    {
-                        Console.WriteLine(w.Value);
-                    }
-                }
+                s.PrintWordsOfGivenLength(length);
             }
         }
 
         public void RemoveWordsStartsOfConsonant(int length)
         {
-            string consonant = "БбВвГгДдЖжЗзЙйКкЛлМмНнПпРрСсТтФфХхЦцЧчШшЩщBbCcDdFfGgHhJjKkLlMmNnPpQqRrSsTtVvWwXxYyZz";
-
-            for (int i = 0; i < Sentences.Count; i++)
+            foreach(var s in Sentences)
             {
-                var newWords = Sentences[i].Tokens.Where(t =>
-                t is Punctuation ||
-                t is Word &&
-                (t.Value.Length != length ||
-                !consonant.Contains(t.Value[0]))).ToList();
-
-                Sentences[i].Tokens.RemoveAll(t => !newWords.Contains(t));
+                s.RemoveWordsStartsOfConsonant(length);
             }
         }
 
@@ -78,10 +71,10 @@ namespace Laboratory_3
             if (sentenceIndex < 0 || sentenceIndex >= Sentences.Count)
                 throw new ArgumentOutOfRangeException(nameof(sentenceIndex));
 
-            var words = Sentences[sentenceIndex].Tokens.Select(t => (t is Word && t.Value.Length == length)
-            ? new Word(substring) : t).ToList();
+            Sentences[sentenceIndex].ReplaceWords(length, substring);
 
-            Sentences[sentenceIndex].ChangeWords(words);
+            Console.WriteLine("Final sentences:");
+            PrintSentences();
         }
 
         public void RemoveStopWords()
@@ -94,13 +87,9 @@ namespace Laboratory_3
                 .Select(w => w.Trim().ToLower())
                 .ToHashSet();
 
-            for (int i = 0; i < Sentences.Count; i++)
+            foreach (var s in Sentences)
             {
-                var newWords = Sentences[i].Tokens.Where(w => 
-                !englishStopWord.Contains(w.Value.ToLower()) && 
-                !russianStopWord.Contains(w.Value.ToLower())).ToList();
-
-                Sentences[i].ChangeWords(newWords);
+                s.RemoveStopWords(englishStopWord, russianStopWord);
             }
         }
 

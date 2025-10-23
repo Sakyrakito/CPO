@@ -17,7 +17,7 @@ namespace Laboratory_3
 
         public Sentence(string text) 
         {
-            var mathes = Regex.Matches(text, @"[A-Za-zА-Яа-яЁё0-9]+(?:['-][A-Za-zА-Яа-яЁё0-9]+)*|\.{3}|[^\w\s]");
+            var mathes = Regex.Matches(text, @"[A-Za-zА-Яа-яЁё0-9]+(?:['-][A-Za-zА-Яа-яЁё0-9]+)*|\.{1,3}|[^\w\s]");
 
             foreach (Match match in mathes)
             {
@@ -36,9 +36,49 @@ namespace Laboratory_3
             return Tokens.Count(t => t is Word);
         }
 
-        public void ChangeWords(List<Token> tokens)
+        public void PrintWordsOfGivenLength(int length)
         {
-            Tokens = tokens;
+            var words = Tokens.Where(t => t is Word && t.Value.Length == length).ToList();
+            HashSet<string> wordsFound = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var w in words)
+            {
+                if (wordsFound.Add(w.Value))
+                {
+                    Console.WriteLine(w.Value);
+                }
+            }
+        }
+
+        public void RemoveWordsStartsOfConsonant(int length)
+        {
+            string consonant = "БбВвГгДдЖжЗзЙйКкЛлМмНнПпРрСсТтФфХхЦцЧчШшЩщBbCcDdFfGgHhJjKkLlMmNnPpQqRrSsTtVvWwXxYyZz";
+
+            var newWords = Tokens.Where(t =>
+                t is Punctuation ||
+                t is Word &&
+                (t.Value.Length != length ||
+                !consonant.Contains(t.Value[0]))).ToList();
+
+            Tokens.RemoveAll(t => !newWords.Contains(t));
+        }
+
+        public void ReplaceWords(int length, string substring)
+        {
+            var words = Tokens.Select(t =>
+            (t is Word && t.Value.Length == length)
+            ? new Word(substring) : t).ToList();
+
+            Tokens = words;
+        }
+
+        public void RemoveStopWords(HashSet<string> englishStopWord, HashSet<string> russianStopWord)
+        {
+            var newWords = Tokens.Where(w =>
+                !englishStopWord.Contains(w.Value.ToLower())
+                && !russianStopWord.Contains(w.Value.ToLower())).ToList();
+
+            Tokens = newWords;
         }
 
         public override string ToString()
@@ -58,5 +98,6 @@ namespace Laboratory_3
 
             return text.ToString();
         }
+
     }
 }
