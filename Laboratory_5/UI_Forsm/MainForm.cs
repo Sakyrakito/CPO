@@ -39,9 +39,9 @@ namespace UI_Forsm
         private void LoadProducts()
         {
             listProducts.Items.Clear();
-            if (comboCategories.SelectedItem is Category cat)
+            if (comboCategories.SelectedItem is Category category)
             {
-                foreach (var p in cat.Products)
+                foreach (var p in category.Products)
                     listProducts.Items.Add(p);
             }
         }
@@ -58,7 +58,7 @@ namespace UI_Forsm
 
             foreach (var meal in _ration.MealTimes)
             {
-                listMeals.Items.Add("[" + meal.Name + "]");
+                listMeals.Items.Add(meal.Name);
                 foreach (var item in meal.Items)
                 {
                     listMeals.Items.Add(
@@ -139,11 +139,11 @@ namespace UI_Forsm
         {
             if (listProducts.SelectedItem is not Product p)
             {
-                MessageBox.Show("Выберите продукт!");
+                MessageBox.Show("Выберите продукт");
                 return;
             }
 
-            var meal = _ration.GetMealByName("Breakfast"); // можно будет сделать выбор
+            var meal = _ration.GetMealByName(listMeals.Text);
             _service.AddProductToMeal(_ration, meal.Name, p, 100);
 
             DisplayRation();
@@ -159,8 +159,8 @@ namespace UI_Forsm
             try
             {
                 string line = listMeals.SelectedItem.ToString();
-
                 string productName = line.Split('-')[0].Trim();
+                
 
                 var meal = _ration.MealTimes.First(m => m.Items.Any(i => i.Product.Name == productName));
                 var product = meal.Items.First(i => i.Product.Name == productName).Product;
@@ -172,7 +172,7 @@ namespace UI_Forsm
             }
             catch
             {
-                MessageBox.Show("Выберите продукт из рациона!");
+                MessageBox.Show("Выберите продукт из рациона");
             }
         }
 
@@ -210,10 +210,7 @@ namespace UI_Forsm
 
         private void btnRemoveMeal_Click(object sender, EventArgs e)
         {
-            string line = listMeals.SelectedItem.ToString();
-            if (!line.StartsWith("[")) return;
-
-            string mealName = line.Replace("[", "").Replace("]", "");
+            string mealName = listMeals.Text;
             _service.RemoveMealTime(_ration, mealName);
             DisplayRation();
         }

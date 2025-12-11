@@ -170,7 +170,7 @@
             comboCategories.FormattingEnabled = true;
             comboCategories.Location = new Point(427, 48);
             comboCategories.Name = "comboCategories";
-            comboCategories.Size = new Size(151, 28);
+            comboCategories.Size = new Size(314, 28);
             comboCategories.TabIndex = 21;
             comboCategories.SelectedIndexChanged += comboCategories_SelectedIndexChanged;
             // 
@@ -188,13 +188,13 @@
             listProducts.FormattingEnabled = true;
             listProducts.Location = new Point(427, 177);
             listProducts.Name = "listProducts";
-            listProducts.Size = new Size(475, 104);
+            listProducts.Size = new Size(475, 224);
             listProducts.TabIndex = 23;
             listProducts.SelectedIndexChanged += listProducts_SelectedIndexChanged;
             // 
             // txtSearch
             // 
-            txtSearch.Location = new Point(427, 331);
+            txtSearch.Location = new Point(427, 428);
             txtSearch.Name = "txtSearch";
             txtSearch.Size = new Size(125, 27);
             txtSearch.TabIndex = 24;
@@ -203,7 +203,7 @@
             // 
             // btnSearch
             // 
-            btnSearch.Location = new Point(427, 382);
+            btnSearch.Location = new Point(427, 479);
             btnSearch.Name = "btnSearch";
             btnSearch.Size = new Size(94, 29);
             btnSearch.TabIndex = 25;
@@ -325,7 +325,7 @@
             // 
             // btnSave
             // 
-            btnSave.Location = new Point(416, 577);
+            btnSave.Location = new Point(427, 597);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(94, 29);
             btnSave.TabIndex = 38;
