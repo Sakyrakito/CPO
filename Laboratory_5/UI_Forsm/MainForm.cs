@@ -161,7 +161,6 @@ namespace UI_Forsm
                 string line = listMeals.SelectedItem.ToString();
                 string productName = line.Split('-')[0].Trim();
                 
-
                 var meal = _ration.MealTimes.First(m => m.Items.Any(i => i.Product.Name == productName));
                 var product = meal.Items.First(i => i.Product.Name == productName).Product;
 
@@ -192,7 +191,7 @@ namespace UI_Forsm
             }
             catch
             {
-                MessageBox.Show("Ошибка удаления!");
+                MessageBox.Show("Ошибка удаления");
             }
         }
 
