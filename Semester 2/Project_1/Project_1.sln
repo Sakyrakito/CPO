@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36811.4 d17.14
+VisualStudioVersion = 17.14.36811.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project_1", "Project_1\Project_1.csproj", "{AFAF4029-3E2B-4743-AA65-B68215433CB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawingUSAMap", "DrawingUSAMap\DrawingUSAMap.csproj", "{E388B023-0CA4-49E6-B2C6-982E42CA8A21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{AFAF4029-3E2B-4743-AA65-B68215433CB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFAF4029-3E2B-4743-AA65-B68215433CB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFAF4029-3E2B-4743-AA65-B68215433CB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E388B023-0CA4-49E6-B2C6-982E42CA8A21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E388B023-0CA4-49E6-B2C6-982E42CA8A21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E388B023-0CA4-49E6-B2C6-982E42CA8A21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E388B023-0CA4-49E6-B2C6-982E42CA8A21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

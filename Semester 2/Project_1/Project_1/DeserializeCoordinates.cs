@@ -9,28 +9,30 @@ using System.Threading.Tasks;
 
 namespace Project_1
 {
-    static public class DeserializeCoordinates
+    public class DeserializeCoordinates
     {
         static public List<State> GetStates()
         {
-            string path = @"D:\CPO\Semester 2\Project_1\states.json";
+            string path = @"D:\CPO\Semester 2\Project_1\Project_1\bin\Debug\net8.0\states.json";
 
             string json = File.ReadAllText(path);
             var statesJson = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json);
 
             if (statesJson is null)
             {
-                throw new ArgumentNullException(paramName: nameof(statesJson));
+                throw new ArgumentNullException(nameof(statesJson));
             }
 
-            List<State> states = new List<State>();
+            List<State> states = [];
             foreach (var entry in statesJson)
             {
                 JsonElement shapeData = entry.Value;
 
-                State state = new State();
-                state.Shapes = NormalizeShapeData(shapeData);
-                state.StateCode = entry.Key;
+                State state = new()
+                {
+                    Shapes = NormalizeShapeData(shapeData),
+                    StateCode = entry.Key
+                };
 
                 states.Add(state);
             }
@@ -38,9 +40,9 @@ namespace Project_1
             return states;
         }
 
-        static List<Shape> NormalizeShapeData(JsonElement shapeJson)
+        static private List<Shape> NormalizeShapeData(JsonElement shapeJson)
         {
-            List<Shape> shapes = new List<Shape>();
+            List<Shape> shapes = [];
 
             if (IsMultiShape(shapeJson))
             {
@@ -57,7 +59,7 @@ namespace Project_1
             return shapes;
         }
 
-        static bool IsMultiShape(JsonElement shapeJson)
+        static private bool IsMultiShape(JsonElement shapeJson)
         {
             try
             {
@@ -69,17 +71,18 @@ namespace Project_1
             }
         }
 
-        static Shape ParseShape(JsonElement shapeJson)
+        static private Shape ParseShape(JsonElement shapeJson)
         {
-            Shape shape = new Shape();
+            Shape shape = new();
 
             foreach (JsonElement poligonJson in shapeJson.EnumerateArray())
             {
-                Polygon poligon = new Polygon();
+                Polygon poligon = new();
 
                 foreach (JsonElement pointJson in poligonJson.EnumerateArray())
                 {
-                    poligon.AddPoint(new Point(pointJson[0].GetDouble(), pointJson[1].GetDouble()));
+                    Point point = new(pointJson[0].GetDouble(), pointJson[1].GetDouble());
+                    poligon.AddPoint(point);
                 }
 
                 shape.AddPolygon(poligon);
