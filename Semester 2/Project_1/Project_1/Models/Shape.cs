@@ -8,11 +8,11 @@ namespace Project_1.Models
 {
     public class Shape
     {
-        public List<Polygon> Polygons { get; set; } = new();
+        public List<Point> Points { get; set; } = new();
 
-        public void AddPolygon(Polygon polygon)
+        public void AddPoint(Point point)
         {
-            Polygons.Add(polygon);
+            Points.Add(point);
         }
     }
 }

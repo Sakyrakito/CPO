@@ -9,36 +9,16 @@ namespace Project_1
     {
         static void Main(string[] args)
         {
-            var states = DeserializeCoordinates.GetStates();
-
-        }
-
-        static public (double minLon, double maxLon, double minLat, double maxLat) FindBounds(List<State> states)
-        {
-            double minLon = double.MaxValue;
-            double maxLon = double.MinValue;
-            double minLat = double.MaxValue;
-            double maxLat = double.MinValue;
-
+            var states = DeserializeUSAMap.GetStates();
+            
             foreach (var state in states)
             {
                 foreach (var shape in state.Shapes)
                 {
-                    foreach (var polygon in shape.Polygons)
-                    {
-                        foreach (var point in polygon.Points)
-                        {
-                            minLon = Math.Min(minLon, point.Longtitude);
-                            maxLon = Math.Max(maxLon, point.Longtitude);
-
-                            minLat = Math.Min(minLat, point.Latitude);
-                            maxLat = Math.Max(maxLat, point.Latitude);
-                        }
-                    }
+                    Console.WriteLine(shape.Points.Count);
                 }
             }
 
-            return (minLon, maxLon, minLat, maxLat);
         }
     }
 }

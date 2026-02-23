@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Project_1
 {
-    public class DeserializeCoordinates
+    static public class DeserializeUSAMap
     {
         static public List<State> GetStates()
         {
@@ -77,15 +77,11 @@ namespace Project_1
 
             foreach (JsonElement poligonJson in shapeJson.EnumerateArray())
             {
-                Polygon poligon = new();
-
                 foreach (JsonElement pointJson in poligonJson.EnumerateArray())
                 {
                     Point point = new(pointJson[0].GetDouble(), pointJson[1].GetDouble());
-                    poligon.AddPoint(point);
+                    shape.AddPoint(point);
                 }
-
-                shape.AddPolygon(poligon);
             }
 
             return shape;
