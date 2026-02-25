@@ -14,6 +14,7 @@ namespace Project_1.Models
         public void AddShape(Shape shape)
         {
             Shapes.Add(shape);
-        }
+        } // [[[[
+        // [[[
     }
 }

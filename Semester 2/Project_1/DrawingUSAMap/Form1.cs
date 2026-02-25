@@ -45,6 +45,15 @@ namespace DrawingUSAMap
                 e.Graphics.FillPath(myDrawingBrush, path);
                 e.Graphics.DrawPath(myDrawingPen, path);
             }
+
+            foreach (var (code, center) in _mapDataManager.GetCenterOfStates)
+            {
+                int x = (int)center.Longtitude;
+                int y = (int)center.Latitude;
+
+                Rectangle rectangle = new Rectangle(x, y, 5, 5);
+                g.DrawEllipse(myDrawingPen, rectangle);
+            }
         }
     }
 }
